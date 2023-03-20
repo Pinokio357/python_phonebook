@@ -27,10 +27,13 @@ def open_file():
         phone_book.append(contact)
 
 def save_file():
-    with open(path, "w", encoding="utf8") as file:
-        for contact in phone_book:
-            data = ";".join(v for v in contact.values())
-            file.write(data + "\n")
+    if phone_book:
+        with open(path, "w", encoding="utf8") as file:
+            for contact in phone_book:
+                data = ";".join(v for v in contact.values())
+                file.write(data + "\n")
+    else:
+        print("phonebook empty or not open")
 def change_contact(book: dict, index: int):
     contact = add_contact()
     return {"name": contact.get("name") if contact.get("name") else book[index - 1].get("name"),
@@ -39,10 +42,13 @@ def change_contact(book: dict, index: int):
 
 
 def add_contact():
-    name = input("enter name: ")
-    phone = input("enter phone: ")
-    comment = input("enter comment: ")
-    return {"name": name, "phone": phone, "comment": comment}
+    if phone_book:
+        name = input("enter name: ")
+        phone = input("enter phone: ")
+        comment = input("enter comment: ")
+        return {"name": name, "phone": phone, "comment": comment}
+    else:
+        print("phonebook empty or not open")
 
 def show_contacts(book, message):
     if not book:
@@ -104,11 +110,14 @@ while True:
             phone_book.append(new_contact)
             print("******************* contact sucsesfully added **************************")
         case 6:
-            show_contacts(phone_book, "file not open")
-            index = get_number("enter number of changing contact: ",f"try again it must be digit from 1 to {len(phone_book)}")
-            print("if you don't want to change some fields,leave it empty: ")
-            contact = change_contact(phone_book, index)
-            phone_book[index-1] = contact
+            if phone_book:
+                show_contacts(phone_book, "file not open")
+                index = get_number("enter number of changing contact: ",f"try again it must be digit from 1 to {len(phone_book)}")
+                print("if you don't want to change some fields,leave it empty: ")
+                contact = change_contact(phone_book, index)
+                phone_book[index-1] = contact
+            else:
+                print("phonebook empty or not open")
         case 7:
             show_contacts(phone_book,"file not open")
             del_contact()
